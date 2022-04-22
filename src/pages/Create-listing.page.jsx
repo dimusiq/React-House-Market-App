@@ -7,6 +7,11 @@ import {
   uploadBytesResumable,
   getDownloadURL
 } from "firebase/storage";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from 'firebase/firestore';
 
 import { db } from '../firebase.config';
 import { v4 as uuidv4 } from 'uuid';
@@ -101,7 +106,7 @@ function CreateListing() {
         data.status === 'ZERO_RESULTS'
           ? undefined
           : data.results[0]?.formatted_address
-
+          console.log(location)
       if (location === undefined || location.includes('undefined')) {
         setLoading(false)
         toast.error('Please enter a correct address')
@@ -111,7 +116,7 @@ function CreateListing() {
     } else {
       geolocation.lat = latitude
       geolocation.lng = longitude
-      console.log(location)
+
     }
 
     //Store images in firebase
@@ -149,7 +154,7 @@ function CreateListing() {
         )
       } )
     }
-    const imgUrls = await Promise.all(
+    const imageUrls = await Promise.all(
       [...images].map((image)=> storeImage(image))
     ).catch(() => {
       setLoading(false)
@@ -157,8 +162,22 @@ function CreateListing() {
       return
     })
 
-    console.log(imgUrls)
+    const formDataCopy = {
+      ...formData,
+      imageUrls,
+      geolocation,
+      timestamp: serverTimestamp()
+    }
+
+    formDataCopy.location = address
+    delete formDataCopy.images
+    delete formDataCopy.address
+    !formDataCopy.offer && delete formDataCopy.discountedPrice
+
+    const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
     setLoading(false)
+    toast.success('Listing saved')
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`)
   }
 
   const onMutate = e => {
