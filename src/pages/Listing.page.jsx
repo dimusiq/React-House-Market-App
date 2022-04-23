@@ -6,14 +6,16 @@ import {
   Popup,
   TileLayer
 } from 'react-leaflet';
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-} from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css/bundle';
+// import SwiperCore, {
+//   Navigation,
+//   Pagination,
+//   Scrollbar,
+//   A11y,
+// } from 'swiper';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import 'swiper/swiper-bundle.min.css'
+// import 'swiper/swiper.min.css'
+
 
 
 import { getDoc, doc } from 'firebase/firestore';
@@ -22,7 +24,7 @@ import { db } from '../firebase.config';
 import Spinner from '../components/Spinner.component';
 import shareIcon from '../assets/svg/shareIcon.svg';
 
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y])
+// SwiperCore.use([Navigation, Pagination, Scrollbar, A11y])
 
 
 function Listing() {
@@ -54,10 +56,9 @@ function Listing() {
 
   return (
     <main>
-      <Swiper
+      {/* <Swiper
         slidesPerView={1}
         pagination={{ clickable: true }}
-        
       >
         {listing.imageUrls.map((url, index) => (
           <SwiperSlide key={index}>
@@ -72,7 +73,7 @@ function Listing() {
             </div>
             </SwiperSlide>
           ))}
-      </Swiper>
+      </Swiper> */}
       <div
         className="shareIconDiv"
         onClick={() => {
